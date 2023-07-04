@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 Style="font-weight: bold; margin:2% 0 0 10%;"> Forums </h1>
+
+
+    <a class="newpostbutton" href={{ url_for("new_post") }}>New Post</a>
+
+    {% for post in posts %}
+    <div style="margin-top: 2%;" class="box">
+        <div class="boxlink">
+        <a href={{ url_for("see_post", id = post.post_id) }}>{{ post.title }} #{{ post.post_id }}</a>
+        </div>
+
+        <div class="boxdescription">
+        {{ post.title }}
+        </div>
+    </div>
+    {% endfor %}z
+    <!-- <div class="box">
+        <div class="boxlink">
+        <a href="#">post #2</a>
+        </div>
+
+        <div class="boxdescription">
+        Posted 4 days ago
+        </div>
+    </div> -->
+    
+
+{% endblock %}

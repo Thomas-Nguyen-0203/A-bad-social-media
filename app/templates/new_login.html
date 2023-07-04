@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if sign_up %}
+    <h1>Sign up</h1>
+    {% else %}
+    <h1>Log in</h1>
+    <input type="hidden" id="login" name="login">
+    {% endif %}
+    <div id="input" class="surrounding_box">
+        <p>
+            <label for="username">Username: </label><br>
+            <input
+            type="text"
+            class="simpletextbox"
+            id="username"
+            name="username"
+            maxlength="50"
+            value>
+            <div 
+            id="username_err" 
+            style="color: red;display: block;">
+        </div>
+        </p>
+        <p>
+            <label for="password">Password: </label><br>
+            <input
+            type="password"
+            class="simpletextbox"
+            id="password"
+            name="password"
+            value>
+            <div id="password_err" style="color: red"></div>
+        </p>
+        {% if sign_up %}
+        <p> <input class="simplebutton" id="submit" type="button" name="submit" value="Sign Up"> </p>
+        {% else %}
+        <p> <input class="simplebutton" id="submit" type="button" name="submit" value="Log In"> </p>
+        {% endif %}
+    </div>
+    <script src={{ url_for("static", filename="js/login_signup.js") }}></script>
+{% endblock %}

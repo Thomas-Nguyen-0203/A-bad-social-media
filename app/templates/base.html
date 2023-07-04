@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Nene Productions</title>
+    <link rel="icon" href={{ url_for("static", filename="Images/cute_nene_wink.png") }} type="image/gif">
+    <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/styles.css") }} media="screen">
+</head>
+<body>
+    <div id="alertbox" class="alert">
+        <span class="closealert" id="closealert" type="button">&times;</span> 
+        You will be logged out after 10 seconds, do you want to stay logged in? <br>
+        <input class="alertresponse" id="logout" type="button" value="No"> </p>
+        <input class="alertresponse" id="stay_logged_in" type="button" value="Yes"> </p>
+    </div>
+
+    {% if first_login %}
+    <style>
+        .main {
+            padding: 50px;
+        }
+    </style>`
+        <div id="loginalertbox" class="loginalert">
+            <span class="closealert" id="closeLoginAlert" type="button">&times;</span> 
+            <h3>Hi, {{ cur_user.username }}, your friends are waiting for you</h3>
+        </div>
+    {% endif %}
+    <div class="navbar">
+        <ul>
+            <div class="logo">
+            <a href={{ url_for("index") }}>Nene Productions</a>
+            </div>
+        {% if cur_user %}
+        <li>
+
+        <div class="dropdown">
+
+            <button class="dropbtn">Settings
+                <i class="fa fa-caret-down"></i>
+            </button>
+
+            <div class="dropdown-content">
+                <a href={{ url_for("logout") }}>Logout</a>
+            </div>
+
+        </div>
+
+        </li>
+        {% endif %}
+
+
+        <li>
+            {% if not cur_user %}
+            <a href={{ url_for("login") }}>Login</a>
+            <a href={{ url_for("sign_up") }}>Sign up</a>
+            {% else %}
+            <a href={{ url_for("get_profile_page", user_id=cur_user.id) }}>Profile</a>
+            <a href={{ url_for("search") }}>Search</a>
+            {% endif %}
+            <a href={{ url_for("index") }}>Home</a>
+        </li>
+
+        </ul>
+    </div>
+
+    {% if css_overflow %}
+
+        <style>
+            body {
+                overflow: visible;
+            }
+            .main {
+                background-color: red;
+            }
+        </style>
+
+        {% else %}
+
+        <style>
+            body {
+                overflow: hidden;
+            }
+        </style>
+
+        {% if not cur_user %}
+            <style>
+                /* background-color: white;*/
+            
+                .main {
+                    background-image: url("../static/Images/Nene_serving.jpeg");
+                }
+                
+            </style>
+        {% else %}
+        <style>
+            .main {
+                /*
+                background-color: white;
+                */
+                background-image: url("../static/Images/newbg2.gif");             
+            }
+        </style>
+        {% endif %}
+
+
+    {% endif %}
+    
+    <div class="main">
+    
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <strong Style="margin: 0 0 3% 5%;"> {{ message }} </strong>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+    </div>
+</body>
+
+{% if cur_user %}
+<script src={{ url_for("static", filename="js/timeout.js") }}></script>
+<script src={{ url_for("static", filename="js/first_login.js") }}></script>
+{% endif %}
+</html>

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="surrounding_box">
+<div><p>User: <h3>{{ user.username }}</h3><br></p></div>
+
+{% if logged_in %}
+    {% if sameUser %}
+        <div>
+            <p>Friends:</p>
+
+        {% if friends %}
+            {% for friend in friends %}
+                <p><a href={{ url_for("get_profile_page", user_id=friend.id) }}><h3>{{ friend.username }}</h3></a></p>
+            {% endfor %}
+
+        {% else %}
+            <p>None</p>
+            <p>Please go out and get some friends.</p>
+            
+        </div>
+        {% endif %}
+
+    {% elif not is_friend and not sameUser %}
+    <div>
+        <button class="simplebutton" id="AddFriendButton">Send friend request</button>
+        {% if cur_user.is_admin and not user.is_admin %}
+            {% if not user.is_muted %}
+        <form action={{ url_for("mute_user", user_id=user.id) }} name="mute" method="POST">    
+            <button class="simplebutton" id="mute">Mute user</button>
+            {% else %}
+        <form action={{ url_for("unmute_user", user_id=user.id) }} name="mute", method="POST">
+            <button class="simplebutton" id="unmute">Unmute user</button>
+            {% endif %}
+        </form>
+        <br>
+        <form action={{ url_for("delete_user_route", user_id=user.id) }}>
+            <button class="simplebutton" id="delete">Delete user</button>
+        </form>
+        {% endif %}
+        
+    </div>
+
+    <script src={{ url_for("static", filename="js/add_friend.js") }}></script>
+
+    {% elif is_friend %}
+    <div>
+        <p>You guys are friends</p>
+    </div>
+    <div>
+        <button class="simplebutton" id="RemoveFriendButton">Remove this friend</button>
+        <a href={{ url_for("get_chat_page", sender_id=cur_user.id, receiver_id=user.id) }}><button class="simplebutton" id="Chat">Start chatting</button></a>
+            {% if cur_user.is_admin and not user.is_admin %}
+                {% if not user.is_muted %}
+                <form action={{ url_for("mute_user", user_id=user.id) }} name="mute", method="POST">    
+                <button class="simplebutton" id="mute">Mute user</button>
+                {% else %}
+                <form action={{ url_for("unmute_user", user_id=user.id) }} name="mute", method="POST">
+                <button class="simplebutton" id="unmute">Unmute user</button>
+                {% endif %}
+            </form>
+            <br>
+            <form action={{ url_for("delete_user_route", user_id=user.id) }}>
+                <button class="simplebutton" id="delete">Delete user</button>
+            </form>
+            {% endif %}
+    </div>
+    <script src={{ url_for("static", filename="js/remove_friend.js") }}></script>
+    {% endif %}
+{% endif %}
+</div>
+{% endblock %}

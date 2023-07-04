@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="row">
+
+        <div class="recipient">
+            <p>Recipient: {{other_user.username}}</p>
+        </div>
+
+        <div id="chatbox" class="chathistory"></div>
+
+        <div id="main_chat" class="chat">
+                <p>
+                    <label for="message"></label>
+                    <!--this super long line is un-avoidable due to how textarea treats whitespace and newlines-->
+                    <textarea id="content" class="chatcontent"rows="5"type="text"id="message"name="message"placeholder="Send a message..."value></textarea>
+                </p>
+                <p Style= "transform: translate(47%, -70%); position: relative;"> 
+                <input class="simplebutton" id="submit" type="button" name="submit" value="Send"> </p>
+
+        </div>
+
+    </div>
+    <script>
+        const pubKeyJSON = {{ pubKey | safe }};
+        const senderName = "{{ cur_user.username }}";
+        const receiverName = "{{ other_user.username }}";
+        const userId = {{ cur_user.id }};
+    </script>
+    <script src={{ url_for("static", filename="js/messaging.js") }}></script>
+
+{% endblock %}

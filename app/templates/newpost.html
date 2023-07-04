@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+    <div id="mutedalertbox" class="mutedpost">
+        <span class="closealert" id="closemutedalert" type="button">&times;</span> 
+        <h3>YOU ARE MUTED!!!! HAHAHA</h3>
+    </div>
+
+
+    <div class="newpost">
+       
+    <h1 Style="font-weight: bold; margin:2% 0 0 10%;"> Make a post </h1> <br>
+
+        <div class="postcontent">
+            
+            <div class="posttitle">
+                Title
+            </div>
+
+            <p>
+                <label for="title"></label><br>
+                <input
+                type="text"
+                id="title"
+                name="title"
+                maxlength="100"
+                placeholder="title of the forum post..."
+                class="newposttitle"
+                value>
+
+                <div 
+                    id="title_err" 
+                    style="color: red;display: block;">
+                </div>
+            </p>
+
+        </div>
+
+        <div class="postcontent">
+
+            <div class="posttitle">
+                Describe your idea/problem...
+            </div>
+
+
+            <div id="main_contents">
+                <p>
+                    <label for="message"></label>
+                    <textarea id="postinfo" 
+                    class="chatcontent newpostcontents"
+                    style="white-space:pre-wrap"
+                    rows="18"
+                    type="text"
+                    id="message"
+                    name="message"
+                    placeholder="Contents of this post..."value></textarea>
+                </p>
+                <div id="content_err" style="color: red;display: block;"></div>
+                <p Style= "transform: translate(47%, -70%); position: relative;"> 
+
+            </div>
+
+        </div> 
+
+        <button class="newpostbutton submitbutton" onclick="processPost()">Submit post</button>
+
+    </div>
+
+
+    <script src={{ url_for("static", filename="js/newpost.js") }}></script>
+
+{% endblock %}

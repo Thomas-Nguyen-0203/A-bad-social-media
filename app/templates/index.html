@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+
+    {% if not cur_user %}
+    <div class="surrounding_box">
+    <h1>Hi, please log in to access our chat service :D</h1>
+    </div>
+    {% endif %}
+
+{% if cur_user %}
+<div class="largerbox">
+    <div class="tablebox2">
+
+    <div class="middlecolumn">
+
+    <h1 Style="font-weight: bold; margin:2% 0 0 10%;"> Forums </h1>
+
+    <div>
+    <a class="newpostbutton" href={{ url_for("new_post") }}>New Post</a> <br><br><br>
+    </div>
+
+    {% for post in posts %}
+    <div class="box">
+        <div class="boxlink">
+        <a Style="word-break: break-word;" href={{ url_for("see_post", id = post.post_id) }}>#{{ post.post_id}} {{ post.title }}</a>
+        </div>
+
+        <div class="boxdescription">
+        {% if post.creator == None%}
+        User: [Deleted]<br>
+        {% elif post.creator.is_admin %}
+        User: <a href={{ url_for("get_profile_page", user_id=post.creator.id) }}><b>Admin</b> <u>{{ post.creator.username }}</u></a> <br>
+
+        {% else %}
+        User: <a href={{ url_for("get_profile_page", user_id=post.creator.id) }}>{{ post.creator.username }}</a> <br>
+        {% endif %}
+
+        Posted {{ post.get_time_passed() }} ago at {{ post.get_accurate_time() }} <br>
+
+        </div>
+
+        <div class="boxdescription" Style="text-align: right;">
+            upvotes: {{ post.upvote }} <br>
+            downvotes: {{ post.downvote }}
+            </div>
+
+            </div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="extendpage"></div>
+</div>
+
+
+</div>
+{% endblock %}

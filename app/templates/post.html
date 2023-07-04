@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="largerbox">
+<div class="tablebox">
+<div class="postbox">
+
+    <div id="mutedalertbox" class="mutedpost">
+        <span class="closealert" id="closemutedalert" type="button">&times;</span> 
+        <h3>YOU ARE MUTED!!!! HAHAHA</h3>
+    </div>
+    <h1 Style="font-weight: bold; word-break: break-word;"> #{{ post.post_id }} {{ post.title }}</h1> 
+    <div class="postcontentbox">
+        {% for line in post.get_content() %}
+        {% if not line %}
+        <br>
+        {% else %}
+        <p>{{ line }}</p>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="marginbox">
+    {% if post.creator.is_admin %}
+    <div>User: <a href={{ url_for("get_profile_page", user_id=post.creator.id) }}>Admin <b>{{ post.creator.username }}</b></a></div>
+    {% else %}
+        {% if post.creator != None %}
+    <div>User: <a href={{ url_for("get_profile_page", user_id=post.creator.id) }}>{{ post.creator.username }}</a></div>
+        {% else %}
+    <div>User: [Deleted]</div>
+        {% endif %}
+    {% endif %}
+    <div>Created {{ post.get_time_passed() }} ago at {{ post.get_accurate_time() }}</div>
+    
+    
+    {% if cur_user.check_if_upvoted(post) %}
+    <div>
+        <button class="votebutton" id="upvote"><b>Upvote: {{ post.upvote }}</b></button>
+    </div>
+    {% else %}
+    <div>
+        <button class="simplebutton" id="upvote">Upvote: {{ post.upvote }}</button>
+    </div>
+    {% endif %}
+
+    {% if cur_user.check_if_downvoted(post) %}
+    <div>
+        <button class="votebutton" id="downvote"><b>Downvote: {{ post.downvote }}</b></button>
+    </div>
+    {% else %}
+    <div>
+        <button class="simplebutton" id="downvote">Downvote: {{ post.downvote }}</button>
+    </div>
+    {% endif %}
+
+    {% if cur_user.is_admin %}
+    <br>
+    <div>
+        <form action={{ url_for("delete_post_route", post_id = post.post_id) }} name="delete" method="POST">
+            <button class="simplebutton" id="delete">Delete Post</button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+
+    <div id="main_contents">
+        <p>
+            <label for="message"></label>
+            <textarea id="comment" 
+            class="chatcontent newpostcontents"
+            style="white-space:pre-wrap"
+            rows="3"
+            type="text"
+            id="message"
+            name="message"
+            placeholder="Comment here..."value></textarea>
+        </p>
+        <div id="comment_err" style="color: red;display: block;"></div>
+        <p Style= "transform: translate(47%, -70%); position: relative;"> 
+
+    </div>
+
+    <div>
+    <button class="newpostbutton" Style="margin: 1% 5% 1% 0; float: right;" onclick="processComment()">Submit comment</button>
+    <br><br><br>
+    </div>
+
+    {% for comment in post.comments %}
+    <div class="bubble" Style="margin-left: 5%;">
+
+        <div class="msg-info">
+            <div class="msg-info-name">
+                {% if comment.commentor == None %}
+                [Deleted]
+                {% elif comment.commentor.is_admin %}
+                <a href={{ url_for("get_profile_page", user_id=comment.commentor.id) }}>Admin <b>{{ comment.commentor.username }}</b></a>
+                {% else %}
+                <a href={{ url_for("get_profile_page", user_id=comment.commentor.id) }}> 
+                    {{ comment.commentor.username }}
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="msg-info-time">{{ comment.get_time_passed() }} ago at {{ comment.get_accurate_time() }}</div>
+    
+        <div class="message">
+            {% for line in comment.get_content() %}
+            {% if not line %}
+            <br>
+            {% else %}
+            <p>{{ line }}</p>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+    </div>
+    {% endfor %}
+
+</div>
+
+    <div class="extendpage"></div>
+</div>
+</div>
+
+    <script src={{ url_for("static", filename="js/post_interaction.js") }}></script>
+
+
+{% endblock %}
